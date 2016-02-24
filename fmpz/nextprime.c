@@ -38,8 +38,9 @@ void fmpz_nextprime(fmpz_t res, const fmpz_t n, int proved)
     else if (COEFF_IS_MPZ(*n))
     {
         /* n is big */
-        __mpz_struct *res_mpz = _fmpz_promote(res);
+        __mpz_struct *res_mpz = _fmpz_promote_val(res);
         mpz_nextprime(res_mpz, COEFF_TO_PTR(*n));
+        _fmpz_demote_val(res);
     }
     else if (FLINT_BIT_COUNT(*n) < FLINT_BITS - 2)
     {
@@ -52,7 +53,7 @@ void fmpz_nextprime(fmpz_t res, const fmpz_t n, int proved)
     {
         /* n is small, but res might not be */
         mpz_t temp_n;
-        __mpz_struct *res_mpz = _fmpz_promote(res);
+        __mpz_struct *res_mpz = _fmpz_promote_val(res);
         flint_mpz_init_set_ui(temp_n, *n);
         mpz_nextprime(res_mpz, temp_n);
         _fmpz_demote_val(res);
@@ -61,9 +62,10 @@ void fmpz_nextprime(fmpz_t res, const fmpz_t n, int proved)
     else
     {
         /* same as above case, but need to handle aliasing here. */
-        __mpz_struct *res_mpz = _fmpz_promote(res);
+        __mpz_struct *res_mpz = _fmpz_promote_val(res);
         mpz_nextprime(res_mpz, res_mpz);
         _fmpz_demote_val(res);
+        fmpz_print(res); printf("\n");
     }
 
     if (proved)
