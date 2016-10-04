@@ -1,30 +1,16 @@
-/*=============================================================================
-
-    This file is part of FLINT.
-
-    FLINT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    FLINT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with FLINT; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-=============================================================================*/
-/******************************************************************************
-
+/*
     Copyright (C) 2006, 2007, 2008, 2009, 2010, 2013 William Hart
     Copyright (C) 2009, 2011 Andy Novocin
     Copyright (C) 2010 Sebastian Pancratz
     Copyright (C) 2011 Fredrik Johansson
 
-******************************************************************************/
+    This file is part of FLINT.
+
+    FLINT is free software: you can redistribute it and/or modify it under
+    the terms of the GNU Lesser General Public License (LGPL) as published
+    by the Free Software Foundation; either version 2.1 of the License, or
+    (at your option) any later version.  See <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef FMPZ_POLY_H
 #define FMPZ_POLY_H
@@ -183,6 +169,9 @@ void fmpz_poly_truncate(fmpz_poly_t poly, slong newlen)
 
 FLINT_DLL void fmpz_poly_set_trunc(fmpz_poly_t res, const fmpz_poly_t poly, slong n);
 
+FLINT_DLL void fmpz_poly_set_rational_roots(fmpz_poly_t pol, fmpq * vec, slong len);
+
+
 /*  Randomisation  ***********************************************************/
 
 FLINT_DLL void fmpz_poly_randtest(fmpz_poly_t f, flint_rand_t state, 
@@ -192,6 +181,9 @@ FLINT_DLL void fmpz_poly_randtest_unsigned(fmpz_poly_t f, flint_rand_t state,
                                                 slong len, mp_bitcnt_t bits);
 
 FLINT_DLL void fmpz_poly_randtest_not_zero(fmpz_poly_t f, flint_rand_t state,
+                                                slong len, mp_bitcnt_t bits);
+
+FLINT_DLL void fmpz_poly_randtest_no_real_root(fmpz_poly_t p, flint_rand_t state,
                                                 slong len, mp_bitcnt_t bits);
 
 /*  Getting and setting coefficients  ****************************************/
@@ -931,9 +923,21 @@ FLINT_DLL void _fmpz_poly_taylor_shift_divconquer(fmpz * poly, const fmpz_t c, s
 FLINT_DLL void fmpz_poly_taylor_shift_divconquer(fmpz_poly_t g, const fmpz_poly_t f,
     const fmpz_t c);
 
-FLINT_DLL void _fmpz_poly_taylor_shift_multi_mod(fmpz * poly, const fmpz_t c, slong n);
+FLINT_DLL void _fmpz_poly_taylor_shift_multi_mod_threaded(fmpz * poly, const fmpz_t c, slong n);
 
-FLINT_DLL void fmpz_poly_taylor_shift_multi_mod(fmpz_poly_t g, const fmpz_poly_t f, const fmpz_t c);
+FLINT_DLL void _fmpz_poly_taylor_shift_multi_mod_omp(fmpz * poly, const fmpz_t c, slong n);
+
+FMPZ_POLY_INLINE
+void fmpz_poly_taylor_shift_multi_mod(fmpz_poly_t g, const fmpz_poly_t f, const fmpz_t c)
+{
+    if (f != g)
+        fmpz_poly_set(g, f);
+#if FLINT_PREFER_OMP
+    _fmpz_poly_taylor_shift_multi_mod_omp(g->coeffs, c, g->length);
+#else
+    _fmpz_poly_taylor_shift_multi_mod_threaded(g->coeffs, c, g->length);
+#endif
+}
 
 FLINT_DLL void _fmpz_poly_taylor_shift(fmpz * poly, const fmpz_t c, slong n);
 
@@ -1215,6 +1219,14 @@ FLINT_DLL void _fmpz_poly_bound_roots(fmpz_t bound, const fmpz * poly, slong len
 
 FLINT_DLL void fmpz_poly_bound_roots(fmpz_t bound, const fmpz_poly_t poly);
 
+FLINT_DLL void _fmpz_poly_num_real_roots_sturm(slong * n_neg, slong * n_pos, const fmpz * pol, slong len);
+
+FLINT_DLL slong fmpz_poly_num_real_roots_sturm(const fmpz_poly_t poly);
+
+FLINT_DLL slong _fmpz_poly_num_real_roots(const fmpz * pol, slong len);
+
+FLINT_DLL slong fmpz_poly_num_real_roots(const fmpz_poly_t poly);
+
 /* Special polynomials */
 
 FLINT_DLL void _fmpz_poly_cyclotomic(fmpz * a, ulong n, mp_ptr factors,
@@ -1236,6 +1248,18 @@ FLINT_DLL void fmpz_poly_chebyshev_t(fmpz_poly_t poly, ulong n);
 FLINT_DLL void _fmpz_poly_chebyshev_u(fmpz * coeffs, ulong n);
 
 FLINT_DLL void fmpz_poly_chebyshev_u(fmpz_poly_t poly, ulong n);
+
+FLINT_DLL void _fmpz_poly_legendre_pt(fmpz * coeffs, ulong n);
+
+FLINT_DLL void fmpz_poly_legendre_pt(fmpz_poly_t poly, ulong n);
+
+FLINT_DLL void _fmpz_poly_hermite_h(fmpz * coeffs, ulong n);
+
+FLINT_DLL void fmpz_poly_hermite_h(fmpz_poly_t poly, ulong n);
+
+FLINT_DLL void _fmpz_poly_hermite_he(fmpz * coeffs, ulong n);
+
+FLINT_DLL void fmpz_poly_hermite_he(fmpz_poly_t poly, ulong n);
 
 FLINT_DLL void _fmpz_poly_fibonacci(fmpz * coeffs, ulong n);
 

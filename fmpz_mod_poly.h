@@ -1,28 +1,14 @@
-/*=============================================================================
-
-    This file is part of FLINT.
-
-    FLINT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    FLINT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with FLINT; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-=============================================================================*/
-/******************************************************************************
-
+/*
     Copyright (C) 2011 Sebastian Pancratz
     Copyright (C) 2014 William Hart
 
-******************************************************************************/
+    This file is part of FLINT.
+
+    FLINT is free software: you can redistribute it and/or modify it under
+    the terms of the GNU Lesser General Public License (LGPL) as published
+    by the Free Software Foundation; either version 2.1 of the License, or
+    (at your option) any later version.  See <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef FMPZ_MOD_POLY_H
 #define FMPZ_MOD_POLY_H
@@ -834,6 +820,45 @@ FLINT_DLL int fmpz_mod_poly_invmod(fmpz_mod_poly_t A,
 
 FLINT_DLL int fmpz_mod_poly_invmod_f(fmpz_t f, fmpz_mod_poly_t A, 
                          const fmpz_mod_poly_t B, const fmpz_mod_poly_t P);
+
+/*  Minpoly  *****************************************************************/
+
+FLINT_DLL slong _fmpz_mod_poly_minpoly_bm(fmpz* poly, 
+                 const fmpz* seq, slong len, const fmpz_t p);
+
+FMPZ_MOD_POLY_INLINE void 
+fmpz_mod_poly_minpoly_bm(fmpz_mod_poly_t poly, const fmpz* seq, slong len)
+{
+    fmpz_mod_poly_fit_length(poly, len+1);
+    poly->length = _fmpz_mod_poly_minpoly_bm(poly->coeffs, seq, len, &poly->p);
+}
+
+FLINT_DLL slong _fmpz_mod_poly_minpoly_hgcd(fmpz* poly, 
+                 const fmpz* seq, slong len, const fmpz_t p);
+
+FMPZ_MOD_POLY_INLINE void 
+fmpz_mod_poly_minpoly_hgcd(fmpz_mod_poly_t poly, const fmpz* seq, slong len)
+{
+    fmpz_mod_poly_fit_length(poly, len+1);
+    poly->length = _fmpz_mod_poly_minpoly_hgcd(poly->coeffs, seq, len, &poly->p);
+}
+
+FMPZ_MOD_POLY_INLINE slong 
+_fmpz_mod_poly_minpoly(fmpz* poly, const fmpz* seq, slong len, const fmpz_t p)
+{
+    if (len < FLINT_MAX(200, 530-22*fmpz_size(p))) 
+    {
+        return _fmpz_mod_poly_minpoly_bm(poly, seq, len, p);
+    }
+    else return _fmpz_mod_poly_minpoly_hgcd(poly, seq, len, p);
+}
+
+FMPZ_MOD_POLY_INLINE void 
+fmpz_mod_poly_minpoly(fmpz_mod_poly_t poly, const fmpz* seq, slong len)
+{
+    fmpz_mod_poly_fit_length(poly, len+1);
+    poly->length = _fmpz_mod_poly_minpoly(poly->coeffs, seq, len, &poly->p);
+}
 
 /*  Resultant  ***************************************************************/
 

@@ -1,30 +1,16 @@
-/*=============================================================================
-
-    This file is part of FLINT.
-
-    FLINT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    FLINT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with FLINT; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-=============================================================================*/
-/******************************************************************************
-
+/*
     Copyright (C) 2006, 2007, 2008, 2009, 2016 William Hart
     Copyright (C) 2008, Peter Shrimpton
     Copyright (C) 2009, Tom Boothby
     Copyright (C) 2010, Fredrik Johansson
 
-******************************************************************************/
+    This file is part of FLINT.
+
+    FLINT is free software: you can redistribute it and/or modify it under
+    the terms of the GNU Lesser General Public License (LGPL) as published
+    by the Free Software Foundation; either version 2.1 of the License, or
+    (at your option) any later version.  See <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef ULONG_EXTRAS_H
 #define ULONG_EXTRAS_H
@@ -133,6 +119,9 @@ extern const unsigned int flint_primes_small[];
 extern FLINT_TLS_PREFIX ulong * _flint_primes[FLINT_BITS];
 extern FLINT_TLS_PREFIX double * _flint_prime_inverses[FLINT_BITS];
 extern FLINT_TLS_PREFIX int _flint_primes_used;
+#if defined(_OPENMP)
+#pragma omp threadprivate(_flint_primes, _flint_prime_inverses, _flint_primes_used)
+#endif
 
 FLINT_DLL void n_compute_primes(ulong num_primes);
 

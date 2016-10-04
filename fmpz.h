@@ -1,27 +1,13 @@
-/*=============================================================================
+/*
+    Copyright (C) 2009 William Hart
 
     This file is part of FLINT.
 
-    FLINT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    FLINT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with FLINT; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-=============================================================================*/
-/******************************************************************************
-
-    Copyright (C) 2009 William Hart
- 
-******************************************************************************/
+    FLINT is free software: you can redistribute it and/or modify it under
+    the terms of the GNU Lesser General Public License (LGPL) as published
+    by the Free Software Foundation; either version 2.1 of the License, or
+    (at your option) any later version.  See <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef FMPZ_H
 #define FMPZ_H
@@ -75,7 +61,7 @@ typedef fmpz_preinvn_struct fmpz_preinvn_t[1];
 
 #define COEFF_IS_MPZ(x) (((x) >> (FLINT_BITS - 2)) == WORD(1))  /* is x a pointer not an integer */
 
-__mpz_struct * _fmpz_new_mpz(void);
+FLINT_DLL __mpz_struct * _fmpz_new_mpz(void);
 
 FLINT_DLL void _fmpz_clear_mpz(fmpz f);
 
@@ -83,9 +69,9 @@ FLINT_DLL void _fmpz_cleanup_mpz_content(void);
 
 FLINT_DLL void _fmpz_cleanup(void);
 
-__mpz_struct * _fmpz_promote(fmpz_t f);
+FLINT_DLL __mpz_struct * _fmpz_promote(fmpz_t f);
 
-__mpz_struct * _fmpz_promote_val(fmpz_t f);
+FLINT_DLL __mpz_struct * _fmpz_promote_val(fmpz_t f);
 
 FMPZ_INLINE
 void _fmpz_demote(fmpz_t f)
@@ -363,7 +349,7 @@ FLINT_DLL size_t fmpz_out_raw( FILE *fout, const fmpz_t x );
 
 FLINT_DLL size_t fmpz_sizeinbase(const fmpz_t f, int b);
 
-char * fmpz_get_str(char * str, int b, const fmpz_t f);
+FLINT_DLL char * fmpz_get_str(char * str, int b, const fmpz_t f);
 
 FMPZ_INLINE
 void fmpz_swap(fmpz_t f, fmpz_t g)
@@ -507,7 +493,7 @@ FLINT_DLL ulong fmpz_mod_ui(fmpz_t f, const fmpz_t g, ulong h);
 
 FLINT_DLL void fmpz_mod(fmpz_t f, const fmpz_t g, const fmpz_t h);
 
-void fmpz_mods(fmpz_t f, const fmpz_t g, const fmpz_t h);
+FLINT_DLL void fmpz_mods(fmpz_t f, const fmpz_t g, const fmpz_t h);
 
 FMPZ_INLINE void
 fmpz_negmod(fmpz_t r, const fmpz_t a, const fmpz_t mod)

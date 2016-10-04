@@ -1,29 +1,14 @@
-/*=============================================================================
-
-    This file is part of FLINT.
-
-    FLINT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    FLINT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with FLINT; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-=============================================================================*/
-/******************************************************************************
-
+/*
     Copyright (C) 2011 Fredrik Johansson
     Copyright (C) 2011 Sebastian Pancratz
 
-******************************************************************************/
+    This file is part of FLINT.
 
+    FLINT is free software: you can redistribute it and/or modify it under
+    the terms of the GNU Lesser General Public License (LGPL) as published
+    by the Free Software Foundation; either version 2.1 of the License, or
+    (at your option) any later version.  See <http://www.gnu.org/licenses/>.
+*/
 
 *******************************************************************************
 
@@ -40,17 +25,6 @@ void fmpq_clear(fmpq_t x)
 
     Clears the \code{fmpq_t} variable \code{x}. To use the variable again,
     it must be re-initialised with \code{fmpq_init}.
-
-fmpq * _fmpq_vec_init(slong n)
-
-    Initialises a vector of \code{fmpq} values of length $n$ and sets
-    all values to 0. This is equivalent to generating a \code{fmpz} vector
-    of length $2n$ with \code{_fmpz_vec_init} and setting all denominators
-    to 1.
-
-void _fmpq_vec_clear(fmpq * vec, slong n)
-
-    Frees an \code{fmpq} vector.
 
 *******************************************************************************
 
@@ -138,6 +112,10 @@ int fmpq_sgn(const fmpq_t x)
     Returns the sign of the rational number $x$.
 
 int fmpq_cmp(const fmpq_t x, const fmpq_t y)
+
+    Returns negative if $x < y$, zero if $x = y$, and positive if $x > y$.
+
+int fmpq_cmp_ui(const fmpq_t x, ulong y)
 
     Returns negative if $x < y$, zero if $x = y$, and positive if $x > y$.
 
@@ -275,27 +253,39 @@ void fmpq_clear_readonly(fmpq_t f)
 
 *******************************************************************************
 
-void fmpq_fprint(FILE * file, const fmpq_t x)
+int fmpq_fprint(FILE * file, const fmpq_t x)
 
     Prints \code{x} as a fraction to the stream \code{file}.   
     The numerator and denominator are printed verbatim as integers, 
     with a forward slash (/) printed in between.
 
-void _fmpq_fprint(FILE * file, const fmpz_t num, const fmpz_t den)
+    In case of success, returns a positive number. In case of failure,
+    returns a non-positive number.
+
+int _fmpq_fprint(FILE * file, const fmpz_t num, const fmpz_t den)
 
     Does the same thing as \code{fmpq_fprint}, but for numerator
     and denominator given explicitly as \code{fmpz_t} variables. 
 
-void fmpq_print(const fmpq_t x)
+    In case of success, returns a positive number. In case of failure,
+    returns a non-positive number.
+
+int fmpq_print(const fmpq_t x)
 
     Prints \code{x} as a fraction. The numerator and denominator are
     printed verbatim as integers, with a forward slash (/) printed in
     between.
 
-void _fmpq_print(const fmpz_t num, const fmpz_t den)
+    In case of success, returns a positive number. In case of failure,
+    returns a non-positive number.
+
+int _fmpq_print(const fmpz_t num, const fmpz_t den)
 
     Does the same thing as \code{fmpq_print}, but for numerator
     and denominator given explicitly as \code{fmpz_t} variables. 
+
+    In case of success, returns a positive number. In case of failure,
+    returns a non-positive number.
 
 *******************************************************************************
 
