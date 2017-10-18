@@ -21,7 +21,7 @@ BUILD_DIRS = aprcl ulong_extras long_extras perm fmpz fmpz_vec fmpz_poly \
    fq fq_vec fq_mat fq_poly fq_poly_factor\
    fq_nmod fq_nmod_vec fq_nmod_mat fq_nmod_poly fq_nmod_poly_factor \
    fq_zech fq_zech_vec fq_zech_mat fq_zech_poly fq_zech_poly_factor \
-   fmpz_mpoly $(EXTRA_BUILD_DIRS)
+   mpoly fmpz_mpoly $(EXTRA_BUILD_DIRS)
 
 TEMPLATE_DIRS = fq_vec_templates fq_mat_templates fq_poly_templates \
    fq_poly_factor_templates fq_templates
@@ -119,6 +119,7 @@ $(FLINT_LIB): $(LOBJS) $(LIB_SOURCES) $(EXT_SOURCES) $(HEADERS) $(EXT_HEADERS) |
 		$(LDCONFIG) -n "$(CURDIR)"; \
 	fi
 	ln -sf "$(FLINT_LIB)" "$(FLINT_LIBNAME)"; \
+	ln -sf "$(FLINT_LIB)" "$(FLINT_LIBNAME).$(FLINT_MAJOR)"; \
 
 libflint.a: $(OBJS) $(LIB_SOURCES) $(EXT_SOURCES) $(HEADERS) $(EXT_HEADERS) | build build/interfaces
 	$(AT)$(foreach ext, $(EXTENSIONS), $(foreach dir, $(filter-out %templates, $(patsubst $(ext)/%.h, %, $(wildcard $(ext)/*.h))), mkdir -p build/$(dir); BUILD_DIR=$(CURDIR)/build/$(dir); export BUILD_DIR; MOD_DIR=$(dir); export MOD_DIR; $(MAKE) -f $(CURDIR)/Makefile.subdirs -C $(ext)/$(dir) static || exit $$?;))
@@ -228,7 +229,7 @@ build/%.o: %.c $(HEADERS) | build
 	$(QUIET_CC) $(CC) $(CFLAGS) $(INCS) -c $< -o $@;
 
 build/test/%$(EXEEXT): test/%.c $(HEADERS) test_helpers.o | build/test
-	$(QUIET_CC) $(CC) $(CFLAGS) $(INCS) $(LDFLAGS) test_helpers.o $< -o $@ $(LIBS)
+	$(QUIET_CC) $(CC) $(CFLAGS) $(INCS) test_helpers.o $< -o $@ $(LIBS) $(LDFLAGS)
 
 build/test:
 	mkdir -p build/test
@@ -243,7 +244,7 @@ build/interfaces/NTL-interface.o: interfaces/NTL-interface.cpp NTL-interface.h
 	$(QUIET_CXX) $(CXX) $(CXXFLAGS) $(INCS) -c $< -o $@
 
 build/interfaces/test/t-NTL-interface$(EXEEXT): interfaces/test/t-NTL-interface.cpp build/interfaces/NTL-interface.o
-	$(QUIET_CXX) $(CXX) $(CXXFLAGS) $(INCS) $(LDFLAGS) $< build/interfaces/NTL-interface.o -o $@ $(LIBS)
+	$(QUIET_CXX) $(CXX) $(CXXFLAGS) $(INCS) $< build/interfaces/NTL-interface.o -o $@ $(LIBS) $(LDFLAGS)
 
 print-%:
 	@echo '$*=$($*)'
