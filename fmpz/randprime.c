@@ -1,5 +1,5 @@
 /*
-    Authored 2015 by Daniel S. Roche; US Government work in the public domain. 
+    Authored 2015 by Daniel S. Roche; US Government work in the public domain.
 
     This file is part of FLINT.
 
@@ -15,7 +15,7 @@
 
 void fmpz_randprime(fmpz_t f, flint_rand_t state, mp_bitcnt_t bits, int proved)
 {
-    if (bits <= FLINT_BITS-3)
+    if (bits <= FLINT_BITS - 2)
     {
         _fmpz_demote(f);
         *f = n_randprime(state, bits, proved);

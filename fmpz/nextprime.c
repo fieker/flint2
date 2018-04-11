@@ -1,5 +1,5 @@
 /*
-    Authored 2015 by Daniel S. Roche; US Government work in the public domain. 
+    Authored 2015 by Daniel S. Roche; US Government work in the public domain.
 
     This file is part of FLINT.
 
@@ -57,7 +57,7 @@ void fmpz_nextprime(fmpz_t res, const fmpz_t n, int proved)
     if (proved)
     {
         int proof = fmpz_is_prime(res);
-        
+
         if (proof == 0)
         {
             /* Keep searching. No big penalty for recursion here because this
@@ -72,4 +72,3 @@ void fmpz_nextprime(fmpz_t res, const fmpz_t n, int proved)
         }
     }
 }
-

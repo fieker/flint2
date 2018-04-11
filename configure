@@ -614,6 +614,7 @@ if [ -z "$CFLAGS" ]; then
       CFLAGS="-O2 -funroll-loops -g $POPCNT_FLAG $ABI_FLAG $OPENMP_FLAG"
    elif [ "$KERNEL" = FreeBSD ]; then
       CFLAGS="-std=c99 -pedantic -Wall -O2 -funroll-loops -g $POPCNT_FLAG $ABI_FLAG $OPENMP_FLAG"
+      CXXFLAGS="-std=c++11 -pedantic -Wall -O2 -funroll-loops -g $POPCNT_FLAG $ABI_FLAG $OPENMP_FLAG"
    else
       CFLAGS="-ansi -pedantic -Wall -O2 -funroll-loops -g $POPCNT_FLAG $ABI_FLAG $OPENMP_FLAG"
    fi
@@ -690,7 +691,7 @@ EXTRA_INC_DIRS="${EXTRA_INC_DIRS} ${EXTENSIONS}"
 
 #include paths
 
-INCS="-I\$(CURDIR)"
+INCS="-I\$(CURDIR) -I\$(CURDIR)/build"
 for INC_DIR in ${INC_DIRS} ${EXTRA_INC_DIRS}; do
    INCS="${INCS} -I${INC_DIR}"
 done

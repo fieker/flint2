@@ -125,6 +125,11 @@ void nmod_poly_truncate(nmod_poly_t poly, slong len)
     If \code{len} is greater than the current length of \code{poly},
     then nothing happens.
 
+void nmod_poly_set_trunc(nmod_poly_t res, const nmod_poly_t poly, slong n)
+
+    Notionally truncate \code{poly} to length $n$ and set \code{res} to the
+    result. The result is normalised.
+
 void _nmod_poly_reverse(mp_ptr output, mp_srcptr input, slong len, slong m)
 
     Sets \code{output} to the reverse of \code{input}, which is of length
@@ -330,6 +335,12 @@ int nmod_poly_equal(const nmod_poly_t a, const nmod_poly_t b)
 
     Returns~$1$ if the polynomials are equal, otherwise~$0$.
 
+int nmod_poly_equal_trunc(const nmod_poly_t poly1,
+                                              const nmod_poly_t poly2, slong n)
+
+    Notionally truncate \code{poly1} and \code{poly2} to length $n$ and return
+    $1$ if the truncations are equal, otherwise return $0$.
+
 int nmod_poly_is_zero(const nmod_poly_t poly)
 
     Returns~$1$ if the polynomial \code{poly} is the zero polynomial,
@@ -387,6 +398,12 @@ void nmod_poly_add(nmod_poly_t res, const nmod_poly_t poly1,
 
     Sets \code{res} to the sum of \code{poly1} and \code{poly2}.
 
+void nmod_poly_add_series(nmod_poly_t res,
+            const nmod_poly_t poly1, const nmod_poly_t poly2, slong n)
+
+    Notionally truncate \code{poly1} and \code{poly2} to length $n$ and set
+    \code{res} to the sum.
+
 void _nmod_poly_sub(mp_ptr res, mp_srcptr poly1, slong len1,
                          mp_srcptr poly2, slong len2, nmod_t mod)
 
@@ -397,6 +414,12 @@ void nmod_poly_sub(nmod_poly_t res, const nmod_poly_t poly1,
                                     const nmod_poly_t poly2)
 
     Sets \code{res} to the difference of \code{poly1} and \code{poly2}.
+
+void nmod_poly_sub_series(nmod_poly_t res,
+            const nmod_poly_t poly1, const nmod_poly_t poly2, slong n)
+
+    Notionally truncate \code{poly1} and \code{poly2} to length $n$ and set
+    \code{res} to the difference.
 
 void nmod_poly_neg(nmod_poly_t res, const nmod_poly_t poly)
 
